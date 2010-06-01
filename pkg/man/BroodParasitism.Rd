@@ -36,6 +36,6 @@
 	Some unpaired (or part-time paired) females also applied brood parasitism.
 }
 \references{
-	Schielzeth, H. and Bolund E. (2010) \emph{Patterns of conspecific brood parasitism in zebra finches}. Animal Behaviour. doi:10.1016/j.anbehav.2010.03.006.
+	Schielzeth, H. and Bolund E. (2010) \emph{Patterns of conspecific brood parasitism in zebra finches}. Animal Behaviour 79: 1329-1337.
 } 
 \keyword{datasets}
