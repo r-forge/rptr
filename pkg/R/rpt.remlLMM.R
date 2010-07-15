@@ -26,7 +26,7 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	R <- R.pe(y, groups)
 	# confidence interval estimation by parametric bootstrapping
 	bootstr <- function(y, groups, k, N, beta0, var.a, var.e) {
-		y.boot <- rep(beta0 + rnorm(k, 0, sqrt(var.a))[groups] + rnorm(N, 0, sqrt(var.e))
+		y.boot <- beta0 + rnorm(k, 0, sqrt(var.a))[groups] + rnorm(N, 0, sqrt(var.e))
 		R.pe(y.boot, groups) 
 	}
 	mod      <- lme(y ~ 1, random = ~ 1|groups )
