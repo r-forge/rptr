@@ -16,10 +16,16 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	N <- length(y)
 	# functions: point estimates of R
 	R.pe <- function(y, groups) {
-		varComps <- nlme::VarCorr(lme(y ~ 1, random = ~ 1|groups ))
-		var.a    <- as.numeric(varComps[1,1])
-		var.e    <- as.numeric(varComps[2,1])
-		R        <- var.a / (var.a + var.e)
+        varComps <- try(nlme::VarCorr(lme(y ~ 1, random = ~1 | groups)), silent=TRUE)
+		if(class(varComps)=="try-error") {
+			warning("Convergence problems in lme (most likely during bootstrap or permutation). R is set to NA for this iteration")
+			R = NA
+		}
+		else {
+			var.a <- as.numeric(varComps[1, 1])
+			var.e <- as.numeric(varComps[2, 1])
+			R <- var.a/(var.a + var.e)
+		}
 		return(R) 
 	}
 	# point estimation according to model 8 and equation 9
@@ -29,7 +35,11 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 		y.boot <- beta0 + rnorm(k, 0, sqrt(var.a))[groups] + rnorm(N, 0, sqrt(var.e))
 		R.pe(y.boot, groups) 
 	}
-	mod      <- lme(y ~ 1, random = ~ 1|groups )
+    mod <- try(lme(y ~ 1, random = ~1 | groups), silent=TRUE)
+	if(class(mod)=="try-error") {
+		warning("Convergence problems in lme. Model is refitted.")
+		mod <- lme(y ~ 1, random = ~1 | groups)                
+	}
 	beta0    <- as.numeric(summary(mod)$tTable[,1])
 	varComps <- nlme::VarCorr(mod)
 	var.a    <- as.numeric(varComps[1,1])
