@@ -45,8 +45,8 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	var.a    <- as.numeric(varComps[1,1])
 	var.e    <- as.numeric(varComps[2,1])	
 	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, beta0, var.a, var.e), simplify=TRUE) 	
-	CI.R     <- quantile(R.boot, c((1-CI)/2,1-(1-CI)/2))
-	se       <- sd(R.boot)
+	CI.R     <- quantile(R.boot, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
+	se       <- sd(R.boot, na.rm=TRUE)
 	# significance test by likelihood-ratio-test
 	LR       <- as.numeric(-2*(logLik(lm(y~1))-logLik(mod)))
 	P.LRT    <- ifelse(LR<=0, 1, pchisq(LR,1,lower.tail=FALSE)/2)
