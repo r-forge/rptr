@@ -84,7 +84,7 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 				R.org=R$R.org, se.org=se.org, CI.org=CI.org, P.org=P.org, 
 				omega=mod.ests$omega,
 				R.boot = list(R.link=unlist(R.boot["R.link",]), R.org=unlist(R.boot["R.org",])),
-				R.permut = list(R.link=unlist(R.permut["R.link",]), R.permut=unlist(R.permut["R.org",])) )
+				R.permut = list(R.link=unlist(R.permut["R.link",]), R.permut=unlist(R.boot["R.org",])) )
 	class(res) <- "rpt"
 	return(res) 
 }			
