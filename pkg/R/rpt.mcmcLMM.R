@@ -2,10 +2,7 @@ rpt.mcmcLMM <- function(y, groups, CI=0.95, prior=NULL){
 	# initial checks
 	if(length(y)!= length(groups)) stop("y and group are of unequal length")
 	# preparation
-	if(class(groups)!="factor") {
-		warning("groups will be converted to a factor")
-		groups <- factor(groups) 
-	}
+	groups <- factor(groups)
 	if(is.null(prior)) prior <- list(R=list(V=1,n=10e-2), G=list(G1=list(V=1,n=10e-2)) )
  	# point estimation according to model 8 and equation 9
 	mod   <- MCMCglmm(y ~ 1, random=~groups, family="gaussian", data=data.frame(y=y,groups=groups), prior=prior, verbose=FALSE)

@@ -1,11 +1,10 @@
 rpt.poisGLMM.multi = function(y, groups, link=c("log", "sqrt"), CI=0.95, nboot=1000, npermut=1000) {
 	# initial checks
 	if(length(y)!= length(groups)) stop("y and group are of unequal length")
+	if(nboot<1) nboot <- 1
+	if(npermut<1) npermut <- 1
 	if(length(link)==1) 
 		if(link!="log" &  link!="sqrt") stop("inappropriate link (has to be log or sqrt)")
-	if(class(groups)!="factor") {
-		warning("groups will be converted to a factor")
-		groups <- factor(groups) }
 	if(any(is.na(y))) {
 		warning("missing values in y are removed")
 		groups <- groups[!is.na(y)]
@@ -15,6 +14,7 @@ rpt.poisGLMM.multi = function(y, groups, link=c("log", "sqrt"), CI=0.95, nboot=1
 		warning("log link used by default")
 		link   <- "log" }
 	# preparation
+	groups <- factor(groups)
 	N <- length(y)
 	k <- length(unique(groups))
 	# functions
@@ -48,26 +48,35 @@ rpt.poisGLMM.multi = function(y, groups, link=c("log", "sqrt"), CI=0.95, nboot=1
 		pqlglmm.pois.model(y.boot, groups, link) 
 	}
 	mod.ests <- pqlglmm.pois.model(y, groups, link, returnR=FALSE)
-	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE) 	
-	CI.link  <- quantile(unlist(R.boot["R.link",]), c((1-CI)/2,1-(1-CI)/2))
-	CI.org   <- quantile(unlist(R.boot["R.org",]), c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
-	se.link  <- sd(unlist(R.boot["R.link",]))
-	se.org   <- sd(unlist(R.boot["R.org",]),na.rm=TRUE)
+	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE)
+	R.boot   <- list(R.link = as.numeric(unlist(R.boot["R.link",])), R.org = as.numeric(unlist(R.boot["R.org",])))  	
+	CI.link  <- quantile(R.boot$R.link, c((1-CI)/2,1-(1-CI)/2))
+	CI.org   <- quantile(R.boot$R.org, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
+	se.link  <- sd(R.boot$R.link)
+	se.org   <- sd(R.boot$R.org,na.rm=TRUE)
 	# significance test by randomization
 	permut   <- function(y, groups, N, link) {
 		samp <- sample(1:N, N)
 		pqlglmm.pois.model(y, groups[samp], link) 
 	}
-	R.permut <- replicate(npermut, permut(y, groups, N, link), simplify=TRUE)
-	P.link   <- sum(unlist(R.permut["R.link",]) >= R$R.link) / npermut
-	P.org    <- sum(unlist(R.permut["R.org",]) >= R$R.org) / npermut 	
+	if(npermut > 1) {
+		R.permut <- replicate(npermut-1, permut(y, groups, N, link), simplify=TRUE)
+		R.permut = list(R.link = c(R$R.link, unlist(R.permut["R.link",])), R.org = c(R$R.org, unlist(R.permut["R.org",])))
+		P.link   <- sum(R.permut$R.link >= R$R.link) / npermut
+		P.org    <- sum(R.permut$R.org >= R$R.org) / npermut
+	}
+	else {
+		R.permut = R
+		P.link = NA
+		P.org = NA
+	}
 	# return of results
 	if(mod.ests$omega<1) warning("omega < 1, therefore CI limits are unreliable")
 	res      <- list(datatype="count", method="PQL", link=link, CI=CI,
 				R.link = R$R.link, se.link=se.link, CI.link=CI.link, P.link=P.link,
 				R.org  = R$R.org, se.org=se.org, CI.org=CI.org, P.org=P.org, omega=mod.ests$omega,
-				R.boot = list(R.link=unlist(R.boot["R.link",]), R.org=unlist(R.boot["R.org",])),
-				R.permut = list(R.link=unlist(R.permut["R.link",]), R.permut=unlist(R.boot["R.org",])) ) 
+				R.boot = list(R.link=R.boot$R.link, R.org=R.boot$R.org),
+				R.permut = list(R.link=R.permut$R.link, R.org=R.permut$R.org) ) 
 	class(res) <- "rpt"
 	return(res)		
 }			

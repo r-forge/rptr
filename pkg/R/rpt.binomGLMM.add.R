@@ -5,7 +5,7 @@ rpt.binomGLMM.add <- function(y, groups, CI=0.95, prior=NULL) {
 	if(any(is.na(y))) warning("missing values in y")
 	# preparation	
 	n          <- rowSums(y)
-	groups     <- as.factor(groups)
+	groups     <- factor(groups)
 	# model fitting
 	if(all(n==1)) {
 		if(is.null(prior)) prior=list(R=list(V=1,fix=1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))

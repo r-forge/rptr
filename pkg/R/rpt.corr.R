@@ -1,6 +1,8 @@
 rpt.corr <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	# initial checks
 	if(length(y)!= length(groups)) stop("y and group are of unequal length")
+	if(nboot<1) nboot <- 1
+	if(npermut<1) npermut <- 1
 	if(any(is.na(y)))              stop("missing values in y ")
 	if(any(is.na(groups)))         stop("missing values in groups ")
 	if(!all(table(groups)==2))     stop("not exactly two data points per group")

@@ -1,10 +1,8 @@
 rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	# initial checks
 	if(length(y)!= length(groups)) stop("y and group are of unequal length")
-	if(class(groups)!="factor") {
-		warning("groups will be converted to a factor")
-		groups <- factor(groups) 
-	}
+	if(nboot<1) nboot <- 1
+	if(npermut<1) npermut <- 1
 	if(any(is.na(y))) {
 		warning("missing values in y are removed")
 		groups <- groups[!is.na(y)]
@@ -12,6 +10,7 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 		y      <- y[!is.na(y)] 
 	}
 	# preparation
+	groups <- factor(groups)
     k <- length(unique(groups))
 	N <- length(y)
 	# functions: point estimates of R
@@ -55,8 +54,14 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 		samp <- sample(1:N, N)
 		R.pe(y, groups[samp]) 
 	}
-	R.permut <- replicate(npermut, permut(y, groups, N), simplify=TRUE)
-	P.permut <- sum(R.permut >= R)/npermut
+	if(npermut > 1) {
+		R.permut <- c(R, replicate(npermut-1, permut(y, groups, N), simplify=TRUE))
+		P.permut <- sum(R.permut >= R)/npermut
+	}
+	else {
+		R.permut = R
+		P.permut <- NA
+	}
 	# return of results
 	res  <- list(datatype="Gaussian", method="LMM.REML", CI=CI, R=R, se=se, CI.R=CI.R, P = c(P.LRT=P.LRT, P.permut=P.permut), R.boot=R.boot, R.permut=R.permut )
 	class(res) <- "rpt"

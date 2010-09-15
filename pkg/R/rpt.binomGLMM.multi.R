@@ -2,17 +2,16 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 	# initial checks
 	if (is.null(dim(y))) y <- cbind(y, 1-y)
 	if (nrow(y)!= length(groups)) stop("y and group are of unequal length")
+	if(nboot<1) nboot <- 1
+	if(npermut<1) npermut <- 1
 	if (length(link)==1) 
 		if(link!="logit" & link!="probit") stop("inappropriate link (has to be logit or probit)")
-	if(class(groups)!="factor") {
-		warning("groups will be converted to a factor")
-		groups <- factor(groups) 
-	}
 	if(length(link)!=1) {
 		warning("logit link used by default")
 		link <- "logit" 
 	}
 	# preparation
+	groups <- factor(groups)
 	n <- rowSums(y)
 	N <- nrow(y)
 	k <- length(unique(groups))
@@ -70,8 +69,14 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 		pqlglmm.binom.model(y, groups[samp], n, link) 
 	}
 	R.permut <- replicate(npermut, permut(y, groups, N, link), simplify=TRUE)
-	P.link   <- sum(unlist(R.permut["R.link",]) >= R$R.link) / npermut
-	P.org    <- sum(unlist(R.permut["R.org",]) >= R$R.org) / npermut 	
+	if(npermut > 1) { 
+		P.link   <- sum(unlist(R.permut["R.link",]) >= R$R.link) / npermut
+		P.org    <- sum(unlist(R.permut["R.org",]) >= R$R.org) / npermut
+	}
+	else {
+		P.link = NA
+		P.org = NA
+	}
 	# return of results
 	if(mod.ests$omega<1) warning("omega < 1, therefore CI are unreliable")
 	res <- list(datatype="binomial", method="PQL", link=link, CI=CI, 

@@ -2,7 +2,7 @@ rpt.poisGLMM.add <- function(y, groups, CI=0.95, prior=NULL) {
 	# initial checks
 	if(any(is.na(y))) warning("missing values in y")
 	# preparation
-	groups     <- as.factor(groups)
+	groups     <- factor(groups)
 	# model fitting
 	if(is.null(prior)) prior=list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))
 	mod        <- MCMCglmm(y ~ 1, random=~groups, family="poisson", data=data.frame(y=y,groups=groups), prior=prior, verbose=FALSE)
