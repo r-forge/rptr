@@ -58,11 +58,12 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 		pqlglmm.binom.model(cbind(m, n-m), groups, n, link) 
 	}
 	mod.ests <- pqlglmm.binom.model(y, groups, n, link, returnR=FALSE)
-	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, n, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE) 	
-	CI.link  <- quantile(unlist(R.boot["R.link",]), c((1-CI)/2,1-(1-CI)/2))
-	CI.org   <- quantile(unlist(R.boot["R.org",]), c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
-	se.link  <- sd(unlist(R.boot["R.link",]))
-	se.org   <- sd(unlist(R.boot["R.org",]),na.rm=TRUE)
+	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE)
+	R.boot   <- list(R.link = as.numeric(unlist(R.boot["R.link",])), R.org = as.numeric(unlist(R.boot["R.org",])))  
+	CI.link  <- quantile(R.boot$R.link, c((1-CI)/2,1-(1-CI)/2))
+	CI.org   <- quantile(R.boot$R.org, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
+	se.link  <- sd(R.boot$R.link)
+	se.org   <- sd(R.boot$R.org,na.rm=TRUE)
 	# significance test by randomization
 	permut   <- function(y, groups, N, link) {
 		samp <- sample(1:N, N)
@@ -70,10 +71,13 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 	}
 	R.permut <- replicate(npermut, permut(y, groups, N, link), simplify=TRUE)
 	if(npermut > 1) { 
-		P.link   <- sum(unlist(R.permut["R.link",]) >= R$R.link) / npermut
-		P.org    <- sum(unlist(R.permut["R.org",]) >= R$R.org) / npermut
+		R.permut <- replicate(npermut-1, permut(y, groups, N, link), simplify=TRUE)
+		R.permut = list(R.link = c(R$R.link, unlist(R.permut["R.link",])), R.org = c(R$R.org, unlist(R.permut["R.org",])))
+		P.link   <- sum(R.permut$R.link >= R$R.link) / npermut
+		P.org    <- sum(R.permut$R.org >= R$R.org) / npermut
 	}
 	else {
+	R.permut = R
 		P.link = NA
 		P.org = NA
 	}
@@ -83,8 +87,8 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 				R.link=R$R.link, se.link=se.link, CI.link=CI.link, P.link=P.link,
 				R.org=R$R.org, se.org=se.org, CI.org=CI.org, P.org=P.org, 
 				omega=mod.ests$omega,
-				R.boot = list(R.link=unlist(R.boot["R.link",]), R.org=unlist(R.boot["R.org",])),
-				R.permut = list(R.link=unlist(R.permut["R.link",]), R.permut=unlist(R.boot["R.org",])) )
+				R.boot = list(R.link=R.boot$R.link, R.org=R.boot$R.org),
+				R.permut = list(R.link=R.permut$R.link, R.org=R.permut$R.org) ) 
 	class(res) <- "rpt"
 	return(res) 
 }			
