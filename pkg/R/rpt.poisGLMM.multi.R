@@ -1,22 +1,25 @@
 rpt.poisGLMM.multi = function(y, groups, link=c("log", "sqrt"), CI=0.95, nboot=1000, npermut=1000) {
 	# initial checks
-	if(length(y)!= length(groups)) stop("y and group are of unequal length")
-	if(nboot<1) nboot <- 1
-	if(npermut<1) npermut <- 1
-	if(length(link)==1) 
-		if(link!="log" &  link!="sqrt") stop("inappropriate link (has to be log or sqrt)")
+	if(length(y) != length(groups)) 
+		stop("y and group hav to be of equal length")
+	if(nboot < 1) nboot <- 1
+	if(npermut < 1) npermut <- 1
+	if(length(link) == 1) 
+		if(link != "log" &  link != "sqrt") 
+			stop("inappropriate link (has to be log or sqrt)")
 	if(any(is.na(y))) {
 		warning("missing values in y are removed")
 		groups <- groups[!is.na(y)]
-		groups <- factor(groups)
-		y      <- y[!is.na(y)] }
+		y      <- y[!is.na(y)]
+	}
 	if(length(link)!=1) {
 		warning("log link used by default")
-		link   <- "log" }
+		link   <- "log"
+	}
 	# preparation
 	groups <- factor(groups)
 	N <- length(y)
-	k <- length(unique(groups))
+	k <- length(levels(groups))
 	# functions
 	pqlglmm.pois.model <- function(y, groups, link, returnR=TRUE) {
 		mod     <-  glmmPQL(y ~ 1,random=~1|groups,  family=quasipoisson(link=eval(link)), verbose=FALSE) 
@@ -61,7 +64,7 @@ rpt.poisGLMM.multi = function(y, groups, link=c("log", "sqrt"), CI=0.95, nboot=1
 	}
 	if(npermut > 1) {
 		R.permut <- replicate(npermut-1, permut(y, groups, N, link), simplify=TRUE)
-		R.permut = list(R.link = c(R$R.link, unlist(R.permut["R.link",])), R.org = c(R$R.org, unlist(R.permut["R.org",])))
+		R.permut <- list(R.link = c(R$R.link, unlist(R.permut["R.link",])), R.org = c(R$R.org, unlist(R.permut["R.org",])))
 		P.link   <- sum(R.permut$R.link >= R$R.link) / npermut
 		P.org    <- sum(R.permut$R.org >= R$R.org) / npermut
 	}

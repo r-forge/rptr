@@ -1,24 +1,32 @@
 rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, nboot=1000, npermut=1000) {
 	# initial checks
-	if (is.null(dim(y))) y <- cbind(y, 1-y)
-	if (nrow(y)!= length(groups)) stop("y and group are of unequal length")
-	if(nboot<1) nboot <- 1
-	if(npermut<1) npermut <- 1
-	if (length(link)==1) 
-		if(link!="logit" & link!="probit") stop("inappropriate link (has to be logit or probit)")
-	if(length(link)!=1) {
+	if (is.null(dim(y))) 
+		y <- cbind(y, 1-y)
+	if (nrow(y) != length(groups)) 
+		stop("y and group have to be of equal length")
+	if(nboot < 1) nboot <- 1
+	if(npermut < 1) npermut <- 1
+	if (length(link) == 1) 
+		if(link != "logit" & link != "probit") 
+			stop("inappropriate link (has to be logit or probit)")
+	if(length(link) != 1) {
 		warning("logit link used by default")
-		link <- "logit" 
+		link <- "logit"
+	}
+	if(any(is.na(y))) {
+		warning("missing values in y are removed")
+		groups <- groups[-rowSums(is.na(y)) > 0]
+		y      <- y[-rowSums(is.na(y)) > 0,]
 	}
 	# preparation
 	groups <- factor(groups)
 	n <- rowSums(y)
 	N <- nrow(y)
-	k <- length(unique(groups))
+	k <- length(levels(groups))
 	# functions
 	pqlglmm.binom.model <- function(y, groups, n, link, returnR=TRUE) {
-		if(all(n==1)) mod <- glmmPQL(y ~ 1,random=~1|groups,  family=binomial(link=eval(link)),verbose=FALSE)
-		else          mod <- glmmPQL(y ~ 1,random=~1|groups,  family=quasibinomial(link=eval(link)),verbose=FALSE)	
+		if(all(n==1)) mod <- glmmPQL(y ~ 1, random=~1|groups,  family=binomial(link=eval(link)), verbose=FALSE)
+		else          mod <- glmmPQL(y ~ 1, random=~1|groups,  family=quasibinomial(link=eval(link)), verbose=FALSE)	
 		VarComp  <- nlme::VarCorr(mod)
 		beta0    <- as.numeric(mod$coefficients$fixed)
 		if(all(n==1)) omega <- 1
@@ -36,9 +44,9 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 		if(returnR) return(list(R.link=R.link, R.org=R.org))
 		else return(list(beta0=beta0, omega=omega, var.a=var.a)) 
 	}
-	# point estimation according to model 10 equations 11-13 (logit link) or Table 1 (probit link)
+	# point estimate
 	R <- pqlglmm.binom.model(y, groups, n, link)
-	# confidence interval estimation by parametric bootstrapping
+	# confidence interval by parametric bootstrapping
 	bootstr <- function(y, groups, k, N, n, beta0, var.a, omega, link) {
 		groupMeans <- rnorm(k, 0, sqrt(var.a))
 		p.link     <- beta0 + groupMeans[groups]
@@ -77,7 +85,7 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 		P.org    <- sum(R.permut$R.org >= R$R.org) / npermut
 	}
 	else {
-	R.permut = R
+		R.permut = R
 		P.link = NA
 		P.org = NA
 	}
