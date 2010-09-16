@@ -4,15 +4,12 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 		y <- cbind(y, 1-y)
 	if (nrow(y) != length(groups)) 
 		stop("y and group have to be of equal length")
-	if(nboot < 1) nboot <- 1
+	if(nboot < 0) 	nboot <- 0
 	if(npermut < 1) npermut <- 1
-	if (length(link) == 1) 
-		if(link != "logit" & link != "probit") 
-			stop("inappropriate link (has to be logit or probit)")
-	if(length(link) != 1) {
-		warning("logit link used by default")
-		link <- "logit"
-	}
+	if(length(link) > 1)
+		link   <- link[1]
+	if(link != "logit" & link != "probit") 
+		stop("inappropriate link (has to be 'logit' or 'probit')")
 	if(any(is.na(y))) {
 		warning("missing values in y are removed")
 		groups <- groups[-rowSums(is.na(y)) > 0]
@@ -65,33 +62,38 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 		}
 		pqlglmm.binom.model(cbind(m, n-m), groups, n, link) 
 	}
-	mod.ests <- pqlglmm.binom.model(y, groups, n, link, returnR=FALSE)
-	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE)
-	R.boot   <- list(R.link = as.numeric(unlist(R.boot["R.link",])), R.org = as.numeric(unlist(R.boot["R.org",])))  
-	CI.link  <- quantile(R.boot$R.link, c((1-CI)/2,1-(1-CI)/2))
+	if(nboot > 0) {
+		mod.ests <- pqlglmm.binom.model(y, groups, n, link, returnR=FALSE)
+		R.boot   <- replicate(nboot, bootstr(y, groups, k, N, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE)
+		R.boot   <- list(R.link = as.numeric(unlist(R.boot["R.link",])), R.org = as.numeric(unlist(R.boot["R.org",])))  
+	}
+	else {
+			R.boot   <- list(R.link = NA, R.org = NA)
+	}
+	CI.link  <- quantile(R.boot$R.link, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
 	CI.org   <- quantile(R.boot$R.org, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
-	se.link  <- sd(R.boot$R.link)
+	se.link  <- sd(R.boot$R.link,na.rm=TRUE)
 	se.org   <- sd(R.boot$R.org,na.rm=TRUE)
 	# significance test by randomization
 	permut   <- function(y, groups, N, link) {
 		samp <- sample(1:N, N)
 		pqlglmm.binom.model(y, groups[samp], n, link) 
 	}
-	R.permut <- replicate(npermut, permut(y, groups, N, link), simplify=TRUE)
 	if(npermut > 1) { 
 		R.permut <- replicate(npermut-1, permut(y, groups, N, link), simplify=TRUE)
-		R.permut = list(R.link = c(R$R.link, unlist(R.permut["R.link",])), R.org = c(R$R.org, unlist(R.permut["R.org",])))
+		R.permut <- list(R.link = c(R$R.link, unlist(R.permut["R.link",])), R.org = c(R$R.org, unlist(R.permut["R.org",])))
 		P.link   <- sum(R.permut$R.link >= R$R.link) / npermut
 		P.org    <- sum(R.permut$R.org >= R$R.org) / npermut
 	}
 	else {
-		R.permut = R
-		P.link = NA
-		P.org = NA
+		R.permut <- R
+		P.link   <- NA
+		P.org    <- NA
 	}
 	# return of results
 	if(mod.ests$omega<1) warning("omega < 1, therefore CI are unreliable")
-	res <- list(datatype="binomial", method="PQL", link=link, CI=CI, 
+	res <- list(call=match.call(), 
+				datatype="binomial", method="PQL", link=link, CI=CI, 
 				R.link=R$R.link, se.link=se.link, CI.link=CI.link, P.link=P.link,
 				R.org=R$R.org, se.org=se.org, CI.org=CI.org, P.org=P.org, 
 				omega=mod.ests$omega,

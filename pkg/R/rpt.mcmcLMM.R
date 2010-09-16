@@ -12,11 +12,12 @@ rpt.mcmcLMM <- function(y, groups, CI=0.95, prior=NULL){
 	# point estimate
 	R     <- posterior.mode( postR )
 	# credibility interval estimation from paterior distribution
-	CI.R    <- HPDinterval(postR,CI)[1,]
+	CI.R    <- coda::HPDinterval(postR,CI)[1,]
 	se 	    <- sd(postR)
 	# 'significance test'
 	P 	  <- NA
-	res = list(datatype="Gaussian", method="LMM.MCMC", CI=CI, R=R, CI.R=CI.R, se=se, P=P, R.post=postR ) 
+	res = list(call=match.call(), datatype="Gaussian", method="LMM.MCMC", CI=CI, 
+				R=R, CI.R=CI.R, se=se, P=P, R.post=postR ) 
 	class(res) <- "rpt"
 	return(res) 
 }

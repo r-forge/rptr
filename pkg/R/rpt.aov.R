@@ -1,7 +1,7 @@
 rpt.aov <- function(y, groups, CI=0.95, npermut=1000) {	
 	# initial checks
     if(length(y) != length(groups)) stop("y and group are not of equal length")
-	if(npermut<1) npermut <- 1
+	if(npermut < 1) npermut <- 1
 	# preparation
 	groups <- factor(groups)
     k  <- length(levels(groups))
@@ -27,10 +27,14 @@ rpt.aov <- function(y, groups, CI=0.95, npermut=1000) {
 		sampy <- sample(y, N)
 		return(R.pe(sampy, groups, n0))
 	}
-	R.permut <- c(R, replicate(npermut-1, permut(y, groups, N, n0), simplify=TRUE))
-	if(npermut > 1)
+	if(npermut > 1) {
+		R.permut <- c(R, replicate(npermut-1, permut(y, groups, N, n0), simplify=TRUE))
 		P.permut <- sum(R.permut >= R)/npermut
-	else P.permut <- NA
+	}
+	else {
+		R.permut <- R
+		P.permut <- NA
+	}
 	# return of results
 	res <- list(call=match.call(), datatype="Gaussian", method="ANOVA", CI=CI, R=R, se=se, CI.R=CI.R, P=c(P.aov=P.aov, P.permut=P.permut), R.permut=R.permut) 
 	class(res) <- "rpt"

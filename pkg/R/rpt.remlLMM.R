@@ -1,8 +1,8 @@
 rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	# initial checks
 	if(length(y)!= length(groups)) stop("y and group are of unequal length")
-	if(nboot<1) nboot <- 1
-	if(npermut<1) npermut <- 1
+	if(nboot < 0) 	nboot <- 0
+	if(npermut < 1) npermut <- 1
 	if(any(is.na(y))) {
 		warning("missing values in y are removed")
 		groups <- groups[!is.na(y)]
@@ -34,16 +34,20 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 		y.boot <- beta0 + rnorm(k, 0, sqrt(var.a))[groups] + rnorm(N, 0, sqrt(var.e))
 		R.pe(y.boot, groups) 
 	}
-    mod <- try(lme(y ~ 1, random = ~1 | groups), silent=TRUE)
-	if(class(mod)=="try-error") {
-		warning("Convergence problems in lme. Model is refitted.")
-		mod <- lme(y ~ 1, random = ~1 | groups)                
+	if(nboot > 0) {
+		mod <- try(lme(y ~ 1, random = ~1 | groups), silent=TRUE)
+		if(class(mod)=="try-error") {
+			warning("Convergence problems in lme. Model is refitted.")
+			mod <- lme(y ~ 1, random = ~1 | groups)                
+		}
+		beta0    <- as.numeric(summary(mod)$tTable[,1])
+		varComps <- nlme::VarCorr(mod)
+		var.a    <- as.numeric(varComps[1,1])
+		var.e    <- as.numeric(varComps[2,1])	
+		R.boot   <- replicate(nboot, bootstr(y, groups, k, N, beta0, var.a, var.e), simplify=TRUE)
 	}
-	beta0    <- as.numeric(summary(mod)$tTable[,1])
-	varComps <- nlme::VarCorr(mod)
-	var.a    <- as.numeric(varComps[1,1])
-	var.e    <- as.numeric(varComps[2,1])	
-	R.boot   <- replicate(nboot, bootstr(y, groups, k, N, beta0, var.a, var.e), simplify=TRUE) 	
+	else
+		R.boot   <- NA
 	CI.R     <- quantile(R.boot, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
 	se       <- sd(R.boot, na.rm=TRUE)
 	# significance test by likelihood-ratio-test
@@ -63,7 +67,10 @@ rpt.remlLMM <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 		P.permut <- NA
 	}
 	# return of results
-	res  <- list(datatype="Gaussian", method="LMM.REML", CI=CI, R=R, se=se, CI.R=CI.R, P = c(P.LRT=P.LRT, P.permut=P.permut), R.boot=R.boot, R.permut=R.permut )
+	res  <- list(call=match.call(), datatype="Gaussian", method="LMM.REML", CI=CI, 
+				 R=R, se=se, CI.R=CI.R, 
+				 P = c(P.LRT=P.LRT, P.permut=P.permut), 
+				 R.boot=R.boot, R.permut=R.permut )
 	class(res) <- "rpt"
 	return(res) 
 }
