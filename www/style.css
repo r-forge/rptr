@@ -1,3 +1,6 @@
+pre {
+	padding: 20px
+}
 h1 {
 	font-family: Arial,sans-serif;
 	color: black;
@@ -14,7 +17,7 @@ h2 {
 	margin-bottom:16px;
 	margin-left:18px;
 }
-ul, li {
+p, ul, li {
 	font-family: Arial,sans-serif;
 	color: black;
 	font-size: 13pt;
