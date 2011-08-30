@@ -5,7 +5,7 @@
 	House Sparrow Body Size Dataset
 }
 \description{
-	Dataset containing morphological measurements of male and female house sparrows.
+	Dataset containing morphological measurements of male and female house sparrows from Lundy Island, UK.
 }
 \usage{
 	data(BodySize)

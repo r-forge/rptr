@@ -29,7 +29,7 @@
 \references{
 	Sokal, R. R. and F. J. Rohlf (1995). \emph{Biometry: The principles and practice of statistics in biological research}. New York, W.H. Freeman and Company.
 
-	Nakagawa, S. and Schielzeth, H. (in press) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews
+	Nakagawa, S. and Schielzeth, H. (2010) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews 85: 935-956
 }
 \author{
 	Holger Schielzeth  (holger.schielzeth@ebc.uu.se) & Shinichi Nakagawa (shinichi.nakagawa@otago.ac.nz)

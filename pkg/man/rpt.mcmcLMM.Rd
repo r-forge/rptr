@@ -33,7 +33,7 @@
 \references{
 	Carrasco, J. L. and Jover, L.  (2003). \emph{Estimating the generalized concordance correlation coefficient through variance components}. Biometrics 59: 849-858.
 	
-	Nakagawa, S. and Schielzeth, H. (in press) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews
+	Nakagawa, S. and Schielzeth, H. (2010) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews 85: 935-956
 }
 \author{
 	Holger Schielzeth  (holger.schielzeth@ebc.uu.se) & Shinichi Nakagawa (shinichi.nakagawa@otago.ac.nz)

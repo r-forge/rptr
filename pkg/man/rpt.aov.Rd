@@ -30,7 +30,7 @@
 	
 	Lessells, C. M. and Boag, P. T. (1987) \emph{Unrepeatable repeatabilities: a common mistake}. Auk 104: 116-121
 	
-	Nakagawa, S. and Schielzeth, H. (in press) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews
+	Nakagawa, S. and Schielzeth, H. (2010) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews 85: 935-956
 }
 \author{
 	Holger Schielzeth  (holger.schielzeth@ebc.uu.se) & Shinichi Nakagawa (shinichi.nakagawa@otago.ac.nz)
