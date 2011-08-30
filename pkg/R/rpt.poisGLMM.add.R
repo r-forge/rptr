@@ -5,7 +5,7 @@ rpt.poisGLMM.add <- function(y, groups, CI=0.95, prior=NULL) {
 	groups     <- factor(groups)
 	# model fitting
 	if(is.null(prior)) prior=list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))
-	mod        <- MCMCglmm(y ~ 1, random=~groups, family="poisson", data=data.frame(y=y,groups=groups), prior=prior, verbose=FALSE)
+	mod        <- MCMCglmm(y ~ 1, random=~groups, family="poisson", data=data.frame(y=y,groups=groups), prior=prior, verbose=FALSE,nitt=13000*10, thin=10*10, burnin=3000*10)
 	# ezxtraction of posterior distributions
 	var.a      <- mod$VCV[,"groups"]
 	var.e      <- mod$VCV[,"units"]

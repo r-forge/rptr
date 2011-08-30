@@ -9,7 +9,7 @@ rpt.binomGLMM.add <- function(y, groups, CI=0.95, prior=NULL) {
 	# model fitting
 	if(all(n==1)) {
 		if(is.null(prior)) prior=list(R=list(V=1,fix=1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))
-		mod    <- MCMCglmm(m ~ 1, random= ~ groups, data=data.frame(m=y[,1],nm=y[,2],groups=groups), prior=prior, family="categorical", verbose=FALSE) 
+		mod    <- MCMCglmm(m ~ 1, random= ~ groups, data=data.frame(m=y[,1],nm=y[,2],groups=groups), prior=prior, family="categorical", verbose=FALSE,nitt=13000*10, thin=10*10, burnin=3000*10) 
 	}
 	else {
 		if(is.null(prior)) prior=list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))
