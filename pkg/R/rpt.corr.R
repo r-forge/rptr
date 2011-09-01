@@ -49,7 +49,7 @@ rpt.corr <- function(y, groups, CI=0.95, nboot=1000, npermut=1000) {
 	}
 	# return of results
 	res <- list(call=match.call(), datatype="Gaussian", method="corr", CI=CI, 
-				R=R, se=se, CI.R=CI.R, P=P, R.permut=R.permut) 
+				R=R, se=se, CI.R=CI.R, P=P.permut, R.permut=R.permut) 
 	class(res) <- "rpt"
 	return(res) 
 }

@@ -56,7 +56,7 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 			rho[rho<=0] <-0				# underdispersion is ignored
 			rho[rho>=1] <- 9e-10      # strong overdispersion is forced to have rho ~ 1
 			if(rho==0) m <- rbinom(N,n,p)
-			else{
+			else {
 				m <- rbetabin(N,n,p,rho)    # or p * rho
 			}
 		}
@@ -64,7 +64,7 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 	}
 	if(nboot > 0) {
 		mod.ests <- pqlglmm.binom.model(y, groups, n, link, returnR=FALSE)
-		R.boot   <- replicate(nboot, bootstr(y, groups, k, N, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE)
+		R.boot   <- replicate(nboot, bootstr(y, groups, k, N, n, mod.ests$beta0, mod.ests$var.a, mod.ests$omega, link), simplify=TRUE)
 		R.boot   <- list(R.link = as.numeric(unlist(R.boot["R.link",])), R.org = as.numeric(unlist(R.boot["R.org",])))  
 	}
 	else {
