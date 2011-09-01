@@ -27,6 +27,6 @@
 	Morphological data from male and female house sparrows on Lundy Island, UK, collected over 2003-2006 (one data point per year).
  }
 \references{
-	Nakagawa, S., Ockendon, N., et al. (2007)  \emph{Does the badge of status influence parental care and investment in house sparrows? An experimental test}. Oecologia 153: 749-760.
+	Nakagawa, S., Ockendon, N., et al. (2007) \emph{Does the badge of status influence parental care and investment in house sparrows? An experimental test}. Oecologia 153: 749-760.
 } 
 \keyword{datasets}

@@ -35,7 +35,7 @@
 	Models for binary data are fitted with \code{list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))} unless other priors are specified in the call.
 }
 \references{
-	Carrasco, J. L. (2010). \emph{A generalized concordance correlation coefficient based on the variance components generalized linear mixed models with application to overdispersed count data}. Biometrics 66: 897â€“904
+	Carrasco, J. L. (2010). \emph{A generalized concordance correlation coefficient based on the variance components generalized linear mixed models with application to overdispersed count data}. Biometrics 66: 897–904.
 
 	Carrasco, J. L. and Jover, L.  (2005). \emph{Concordance correlation coefficient applied to discrete data}. Statistics in Medicine 24: 4021-4034.
 	
@@ -55,9 +55,9 @@ attach(BroodParasitism)
 detach(BroodParasitism)
 
 # repeatability for male fledgling success
-data(MaleFledgling)
-attach(MaleFledgling)
-(rpt.Fledge <- rpt.poisGLMM.add(Fledge,MaleID))
-detach(MaleFledgling)
+data(Fledglings)
+attach(Fledglings)
+(rpt.Fledge <- rpt.poisGLMM.add(Fledge, MaleID))
+detach(Fledglings)
 }
 \keyword{models}

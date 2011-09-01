@@ -1,21 +1,22 @@
-\name{rpt}
-\alias{rpt}
+\name{rpt.adj}
+\alias{rpt.adj}
 \title{
-	Repeatability Calculation for Gaussian and Non-Gaussian Data
+	(Adjusted) Repeatability Calculation for Gaussian and Non-Gaussian Data
 }
 \description{
-	A wrapper function for repeatability calculations. Calls specialised functions depending of the choice of datatype and method.
+	A wrapper function for (adjusted) repeatability calculations. Calls specialised functions depending of the choice of datatype and method.
 }
 \usage{
-rpt (y, groups,
+rpt.adj (formula, grname, data,
 	datatype=c("Gaussian", "binomial", "proportion", "count"),  
 	method=c("corr", "ANOVA", "REML", "MCMC", "GLMM.add", "GLMM.multi"),  
 	link=c("logit", "probit", "log", "sqrt"),
 	CI=0.95, nboot=1000, npermut=1000) 
 }
 \arguments{
-	\item{y}{Vector of measurements (or two-column matrix or dataframe in case of proprotion data, see \link{rpt.binomGLMM.add} and \link{rpt.binomGLMM.multi} for details.}
-	\item{groups}{Vector of group identitities (will be converted to a factor).}
+	\item{formula}{Formula as used e.g. by \link{lmer}. The grouping factor of interest needs to be included as a random effect, e.g. '(1|groups)'. Covariates and additional random effects can be included to estimate adjusted repeatabilities.}
+	\item{grname}{A character string or vector of character strings giving the name(s) of the grouping factor(s), for which the repeatability should be estimated. Spelling needs to match the random effect names as given in \code{fromula}.}
+	\item{data}{A dataframe that contains the variables included in the formula argument.}
   	\item{datatype}{Character string specifying the data type ("Gaussian", "binomial", "proportion", "count"). "binomial" and "proportion" are interchangable and call the same functions.}
   	\item{method}{character string specifying the method of calculation. Defaults to "REML" for Gaussian data and to "GLMM.multi" for binomial and count data.}
   	\item{link}{Character string specifying the link function. Ignored for "Gaussian" datatype and for the "GLMM.add" method.}
@@ -59,50 +60,13 @@ rpt (y, groups,
 	Holger Schielzeth  (holger.schielzeth@ebc.uu.se) & Shinichi Nakagawa (shinichi.nakagawa@otago.ac.nz)
 }
 \seealso{	
-	\link{rpt.adj}, \link{rpt.corr}, \link{rpt.aov}, \link{rpt.remlLMM}, \link{rpt.mcmcLMM}, \link{rpt.binomGLMM.add}, \link{rpt.binomGLMM.multi}, \link{rpt.poisGLMM.add}, \link{rpt.poisGLMM.multi} 
+	\link{rpt}
 }
 \examples{
 # for Gaussian data - correlation-based repeatability
 # repeatability for male breeding success on a transformed scale
 data(Fledglings)
 Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
-attach(Fledglings)
-(rpt.Fledge <- rpt(sqrtFledge, MaleID, datatype="Gaussian", method="corr", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
-detach(Fledglings)
-
-# for Gaussian data - ANOVA-based and two LMM-based repeatabilities
-# repeatability estimation for weight (body mass)
-data(BodySize)
-attach(BodySize)
-(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="ANOVA", npermut=10))              # reduced number of npermut iterations
-(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="REML", nboot=10, npermut=10))     # reduced number of nboot and npermut iterations
-(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="MCMC"))
-detach(BodySize)
-
-# for Binary data - additive and multiplicative overdispersion models
-# repeatability estimations for egg dumping (binary data)
-data(BroodParasitism)
-attach(BroodParasitism)
-(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.multi", link="logit", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
-(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.multi", link="probit", nboot=10, npermut=10)) # reduced number of nboot and npermut iterations
-(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.add"))
-detach(BroodParasitism)
-
-# for proportion data - additive and multiplicative overdispersion models
-# repeatability estimations for egg dumping (proportion data)
-data(BroodParasitism)
-attach(BroodParasitism)
-ParasitisedOR <- cbind(HostClutches, OwnClutches-HostClutches)   
-(rpt.Host <- rpt(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], datatype="proportion", method="GLMM.multi", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
-(rpt.Host <- rpt(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], datatype="proportion", method="GLMM.add"))
-detach(BroodParasitism)
-
-# for count data - additive and multiplicative overdispersion models
-# repeatability for male fledgling success
-data(Fledglings)
-attach(Fledglings)
-(rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.multi", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
-(rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.add"))
-detach(Fledglings)
+(rpt.Fledge <- rpt.adj(sqrtFledge ~ Age + (1|MaleID), "MaleID", data=Fledglings, datatype="Gaussian", method="REML", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
 }
 \keyword{models}

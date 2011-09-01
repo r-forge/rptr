@@ -1,5 +1,5 @@
-\name{MaleFledgling}
-\alias{MaleFledgling}
+\name{Fledglings}
+\alias{Fledglings}
 \docType{data}
 \title{
 	Male House Sparrow Fledgling Success Dataset
@@ -8,7 +8,7 @@
   Dataset containing fledgling success for male house sparrows per year over two years.
 }
 \usage{
-	data(MaleFledgling)
+	data(Fledglings)
 }
 \format{
   A data frame with 94 observations on the following 3 variables.

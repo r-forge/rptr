@@ -39,11 +39,11 @@
 }
 \examples{
 # repeatability for male breeding success on a transformed scale
-data(MaleFledgling)
-attach(MaleFledgling)
-sqrtFledge <- sqrt(Fledge)
-(rpt.Fledge <- rpt.corr(sqrtFledge,MaleID, nboot=10, npermut=10))  # low number of nboot and npermut to speed up error checking
-detach(MaleFledgling)
+data(Fledglings)
+Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
+attach(Fledglings)
+(rpt.Fledge <- rpt.corr(sqrtFledge, MaleID, nboot=10, npermut=10))  # reduced number of npermut iterations
+detach(Fledglings)
 }
 \keyword{models}
 

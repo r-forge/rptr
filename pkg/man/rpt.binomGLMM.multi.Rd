@@ -46,7 +46,7 @@
 	
 	Goldstein, H., Browne, W., et al. (2002). \emph{Partitioning variation in multilevel models} Understanding Statistics 1: 223-231.
 	
-	Nakagawa, S. and Schielzeth, H. (in press) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists} Biological Reviews
+	Nakagawa, S. and Schielzeth, H. (2011) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews 85: 935-956.
 }
 \author{
 	Holger Schielzeth  (holger.schielzeth@ebc.uu.se) & Shinichi Nakagawa (shinichi.nakagawa@otago.ac.nz)
@@ -57,16 +57,16 @@
 data(BroodParasitism)
 attach(BroodParasitism)
 (rpt.Host <- rpt.binomGLMM.multi(HostYN[OwnClutchesBothSeasons==1], FemaleID[OwnClutchesBothSeasons==1], nboot=10, npermut=10)) # low number of nboot and npermut to speed up error checking
-(rpt.BroodPar <- rpt.binomGLMM.multi(cbpYN, FemaleID, nboot=10, npermut=10))                                        # low number of nboot and npermut to speed up error checking
+(rpt.BroodPar <- rpt.binomGLMM.multi(cbpYN, FemaleID, nboot=10, npermut=10))  # low number of nboot and npermut to speed up error checking
 detach(BroodParasitism)
 
 # repeatability estimations for egg dumping (proportion data)
 data(BroodParasitism)
 attach(BroodParasitism)
 ParasitisedOR <- cbind(HostClutches, OwnClutches-HostClutches)   
-(rpt.Host <- rpt.binomGLMM.multi(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], nboot=10, npermut=10))   # low number of nboot and npermut to speed up error checking
+(rpt.Host <- rpt.binomGLMM.multi(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], nboot=10, npermut=10))  # reduced number of npermut iterations
 ParasitismOR <- cbind(cbpEggs, nEggs-cbpEggs)   
-#(rpt.BroodPar <- rpt.binomGLMM.multi(ParasitismOR, FemaleID, nboot=10, npermut=10)) 														# low number of nboot and npermut to speed up error checking
+#(rpt.BroodPar <- rpt.binomGLMM.multi(ParasitismOR, FemaleID, nboot=10, npermut=10))  # reduced number of npermut iterations
 detach(BroodParasitism)
 }
 \keyword{models}

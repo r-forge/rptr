@@ -42,7 +42,7 @@
 	Confidence intervals and standard errors are inappropriate at high repeatabilities (\emph{omega} < 1), because parametric bootstrapping allows only \emph{omega} greater than or equal to  1.
 }
 \references{
-	Carrasco, J. L. (2010). \emph{A generalized concordance correlation coefficient based on the variance components generalized linear mixed models with application to overdispersed count data}. Biometrics 66: 897-904
+	Carrasco, J. L. (2010). \emph{A generalized concordance correlation coefficient based on the variance components generalized linear mixed models with application to overdispersed count data}. Biometrics 66: 897-904.
 
 	Carrasco, J. L. and Jover, L.  (2005). \emph{Concordance correlation coefficient applied to discrete data}. Statistics in Medicine 24: 4021-4034.
 	
@@ -59,13 +59,13 @@
 # repeatability for female clutch size over two years.
 data(BroodParasitism)
 attach(BroodParasitism)
-(rpt.Host <- rpt.poisGLMM.multi(OwnClutches, FemaleID, nboot=10, npermut=10)) # low number of nboot and npermut to speed up error checking
+(rpt.Host <- rpt.poisGLMM.multi(OwnClutches, FemaleID, nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
 detach(BroodParasitism)
 
 # repeatability for male fledgling success
-data(MaleFledgling)
-attach(MaleFledgling)
-(rpt.Fledge <- rpt.poisGLMM.multi(Fledge,MaleID, nboot=10, npermut=10)) # low number of nboot and npermut to speed up error checking
-detach(MaleFledgling)
+data(Fledglings)
+attach(Fledglings)
+(rpt.Fledge <- rpt.poisGLMM.multi(Fledge, MaleID, nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
+detach(Fledglings)
 }
 \keyword{models}

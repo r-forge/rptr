@@ -28,7 +28,7 @@
 \references{
 	Becker, W. A. (1992) \emph{A manual of quantitative genetics}. 5th edn. Academic Enterprises, Pullman, WA.
 	
-	Lessells, C. M. and Boag, P. T. (1987) \emph{Unrepeatable repeatabilities: a common mistake}. Auk 104: 116-121
+	Lessells, C. M. and Boag, P. T. (1987) \emph{Unrepeatable repeatabilities: a common mistake}. Auk 104: 116-121.
 	
 	Nakagawa, S. and Schielzeth, H. (2010) \emph{Repeatability for Gaussian and non-Gaussian data: a practical guide for biologists}. Biological Reviews 85: 935-956
 }
@@ -40,13 +40,13 @@
 # repeatability estimation for tarsus length - a very high R
 data(BodySize)
 attach(BodySize)
-(rpt.BS <- rpt.aov(Tarsus, BirdID, npermut=10))   # low number of npermut to speed up error checking)
+(rpt.BS <- rpt.aov(Tarsus, BirdID, npermut=10))    # reduced number of npermut iterations
 detach(BodySize)
 
 # repeatability estimation for weight (body mass) - a lower R than the previous one
 data(BodySize)
 attach(BodySize)
-(rpt.Weight <- rpt.aov(Weight, BirdID, npermut=10))   # low number of npermut to speed up error checking
+(rpt.Weight <- rpt.aov(Weight, BirdID, npermut=10))   # reduced number of npermut iterations
 detach(BodySize)
 }
 \keyword{models}
