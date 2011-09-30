@@ -23,9 +23,10 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 	if(any(R==0)) {
 		warning("(One of) the point(s) estimate for the repeatability was exactly zero; parametric bootstrapping has been skipped.")
 		R.boot = R.pe
-		CI.R = rep(NA, length(R.pe))
-		names(CI.R) = grname
-		se <- rep(NA, length(R.pe))
+		CI.R = matrix(rep(NA, length(grname)*2),ncol=2)
+		rownames(CI.R) = grname
+		colnames(CI.R) = c("lower","upper")
+		se <- rep(NA, length(grname))
 		names(se) = grname 
 	}
 	else {
@@ -42,15 +43,31 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 			names(se) = grname	}
 	}
 	# significance test by permutation
-	P.permut <- NA
+	P.permut <- rep(NA, length(grname))
 	# significance test by likelihood-ratio-test
-	P.LRT    <- NA
+	terms = attr(terms(formula), "term.labels")
+	randterms = terms[which(regexpr(" | ",terms,perl=TRUE)>0)]
+	if(length(randterms)==1) {
+		LR       <- as.numeric(-2*(logLik(lm(update(formula, eval(paste(". ~ . ", paste("- (", randterms, ")") ))), data=data))-logLik(mod)))
+		print(LR)
+		P.LRT    <- ifelse(LR<=0, 1, pchisq(LR,1,lower.tail=FALSE)/2)
+	}
+	if(length(randterms)>1) {
+		P.LRT = rep(NA, length(randterms))
+		for(i in 1:length(randterms)) {
+			LR       <- as.numeric(-2*(logLik(lmer(update(formula, eval(paste(". ~ . ", paste("- (", randterms[i], ")") ))), data=data))-logLik(mod)))
+			P.LRT[i] <- ifelse(LR<=0, 1, pchisq(LR,1,lower.tail=FALSE)/2)
+		}
+	}
 	# preparing results
+	P = matrix(c(P.LRT, P.permut),ncol=2,byrow=FALSE)
+	colnames(P) = c("P.LRT", "P.permut")
+	rownames(P) = grname
 	res  = list(datatype="Gaussian", 
 				method="LMM.REML", 
 				CI=CI,
 				R=R, se=se, CI.R=CI.R, 
-				P = c(P.LRT=P.LRT, P.permut=P.permut),
+				P = P,
 				R.boot=R.boot, R.permut=NA,
 				mod = mod	)
 	class(res) <- "rpt"

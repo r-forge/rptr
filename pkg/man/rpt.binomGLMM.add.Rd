@@ -5,13 +5,15 @@
  Calculates repeatability from a generalised linear mixed-effects models fitted by MCMC for binary and proportion data
 }
 \usage{
-rpt.binomGLMM.add(y, groups, CI=0.95, prior=NULL)
+rpt.binomGLMM.add(y, groups, CI=0.95, prior=NULL, verbose=FALSE, ...)
 }
 \arguments{
 	\item{y}{Vector of a response values (for binary data) or a two-column matrix, array or data.frame with colums \code{m, n-m}, where \code{m} is the number of successes and n the number of trials.}
 	\item{groups}{Vector of group identities.}
 	\item{CI}{Width of the Bayesian credible interval (defaults to 0.95)}
-	\item{prior}{List of prior values passed to the \link{MCMCglmm} function in \pkg{MCMCglmm} (see there for more details). Default priors will be used if prior is \code{NULL}.} 
+	\item{prior}{List of prior values passed to the \link{MCMCglmm} function in \pkg{MCMCglmm} (see there for more details). Default priors will be used if prior is \code{NULL}.}
+	\item{verbose}{Whether or not \link{MCMCglmm} should print MH diagnostics are printed to screen. Defaults to FALSE.}
+	\item{...}{Additonal arguements that are passed on to \link{MCMCglmm} (e.g. length of chain, thinning interval).}
 }
 \value{
 	Returns an object of class rpt that is a a list with the following elements: 
@@ -30,8 +32,8 @@ rpt.binomGLMM.add(y, groups, CI=0.95, prior=NULL)
 }
 \details{
 	Models are fitted using the \link{MCMCglmm} function in \pkg{MCMCglmm}. The categorical family is used for binary data, while the multinomial2 is used for proportion data. 
-	Models for binary data are fitted with \code{list(R=list(V=1,fix=1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))} unless other priors are specified in the call.
-	Models for proportion data are fitted with \code{list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))} unless other priors are specified in the call.
+	Models for binary data are fitted with \code{list(R=list(V=1,fix=1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpha.V=25^2)))} unless other priors are specified in the call.
+	Models for proportion data are fitted with \code{list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpha.V=25^2)))} unless other priors are specified in the call.
 }
 \references{
 	Browne, W. J., Subramanian, S. V., et al. (2005). \emph{Variance partitioning in multilevel logistic models that exhibit overdispersion}. Journal of the Royal Statistical Society A 168: 599-613.

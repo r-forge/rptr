@@ -1,11 +1,11 @@
-rpt.poisGLMM.add <- function(y, groups, CI=0.95, prior=NULL) {
+rpt.poisGLMM.add <- function(y, groups, CI=0.95, prior=NULL, verbose=FALSE, ...) {
 	# initial checks
 	if(any(is.na(y))) warning("missing values in y")
 	# preparation
 	groups     <- factor(groups)
 	# model fitting
-	if(is.null(prior)) prior=list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpah.V=25^2)))
-	mod        <- MCMCglmm(y ~ 1, random=~groups, family="poisson", data=data.frame(y=y,groups=groups), prior=prior, verbose=FALSE,nitt=13000*10, thin=10*10, burnin=3000*10)
+	if(is.null(prior)) prior=list(R=list(V=1e-10,nu=-1),G=list(G1=list(V=1,nu=1,alpha.mu=0,alpha.V=25^2)))
+	mod        <- MCMCglmm(y ~ 1, random=~groups, family="poisson", data=data.frame(y=y,groups=groups), prior=prior, verbose=verbose, ...)
 	# ezxtraction of posterior distributions
 	var.a      <- mod$VCV[,"groups"]
 	var.e      <- mod$VCV[,"units"]

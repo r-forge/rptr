@@ -15,7 +15,7 @@
 	\item{data}{A dataframe that contains the variables included in the formula argument.}
 	\item{CI}{Width of the confidence interval (defaults to 0.95).} 
     \item{nboot}{Number of parametric bootstraps for interval estimation. Defaults to 1000. Larger numbers of permutations give a better asymtotic CI, but may be very time-consuming.}
- 	\item{npermut}{Number of permutations used when calculating asymptotic \emph{P} values (defaults to 1000).}
+ 	\item{npermut}{Number of permutations used when calculating asymptotic \emph{P} values (defaults to 1000). Currently not in use!}
 }
 \value{
 	Returns an object of class rpt that is a a list with the following elements: 
@@ -45,14 +45,10 @@
 \examples{
 # repeatability estimation for tarsus length - a very high R
 data(BodySize)
-attach(BodySize)
 (rpt.BS <- rpt.remlLMM.adj(Tarsus ~ Sex + (1|BirdID), "BirdID", data=BodySize, nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
-detach(BodySize)
 
 # repeatability estimation for weight (body mass) - a lower R than the previous one
 data(BodySize)
-attach(BodySize)
 (rpt.Weight <- rpt.remlLMM.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, nboot=10, npermut=10)) # reduced number of nboot and npermut iterations
-detach(BodySize)
 }
 \keyword{models}

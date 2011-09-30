@@ -1,19 +1,21 @@
 \name{rpt.mcmcLMM}
 \alias{rpt.mcmcLMM}
 \title{
-	LMM-based Repeatability Using MCMC
+	LMM-based repeatability estimated using MCMC sampling
 }
 \description{
 	Calculates repeatability from a linear mixed-effects models fitted by MCMC
 }
 \usage{
-	rpt.mcmcLMM(y, groups, CI=0.95, prior=NULL)
+	rpt.mcmcLMM(y, groups, CI=0.95, prior=NULL, verbose=FALSE, ...)
 }
 \arguments{
 	\item{y}{Vector of a response values}
 	\item{groups}{Vector of group identities}
 	\item{CI}{Width of the Bayesian credible interval (defaults to 0.95)}
 	\item{prior}{List of prior values passed to the \link{MCMCglmm} function in \pkg{MCMCglmm} (see there for more details). Default priors will be used if prior is \code{NULL}.} 
+	\item{verbose}{Whether or not \link{MCMCglmm} should print MH diagnostics are printed to screen. Defaults to FALSE.}
+	\item{...}{Additonal arguements that are passed on to \link{MCMCglmm} (e.g. length of chain, thinning interval).}
 }
 \value{
 	Returns an object of class rpt that is a a list with the following elements: 
