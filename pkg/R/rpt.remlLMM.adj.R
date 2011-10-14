@@ -1,5 +1,7 @@
 rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1000) {
 	mod         <- lmer(formula, data=data)
+	if(nboot < 0) 	nboot <- 0
+	if(npermut < 1) npermut <- 1
 	# point estimates of R
 	R.pe <- function(formula, data, grname) {
 		mod.fnc = lmer(formula, data)
@@ -30,17 +32,18 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 		names(se) = grname 
 	}
 	else {
-		R.boot   <- replicate(nboot, bootstr(mod, formula, data, grname), simplify=TRUE)
-		if(length(grname) == 1) {
-			CI.R     <- quantile(R.boot, c((1-CI)/2,1-(1-CI)/2))
-			se <- sd(R.boot)
-			names(se) = grname }
-		else {
-			CI.R     <- t(apply(R.boot, 1, function(x) { quantile(x, c((1-CI)/2,1-(1-CI)/2))}))	
-			se       <- apply(R.boot, 1, sd)
-			rownames(R.boot) = grname
-			rownames(CI.R) = grname
-			names(se) = grname	}
+		if(nboot > 0) R.boot   <- replicate(nboot, bootstr(mod, formula, data, grname), simplify=TRUE)
+		else R.boot <- matrix(rep(NA, length(grname)), nrow=length(grname))
+			if(length(grname) == 1) {
+				CI.R     <- quantile(R.boot, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)
+				se <- sd(R.boot)
+				names(se) = grname }
+			else {
+				CI.R     <- t(apply(R.boot, 1, function(x) { quantile(x, c((1-CI)/2,1-(1-CI)/2), na.rm=TRUE)}))	
+				se       <- apply(R.boot, 1, sd)
+				rownames(R.boot) = grname
+				rownames(CI.R) = grname
+				names(se) = grname	}
 	}
 	# significance test by permutation
 	P.permut <- rep(NA, length(grname))
@@ -49,7 +52,6 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 	randterms = terms[which(regexpr(" | ",terms,perl=TRUE)>0)]
 	if(length(randterms)==1) {
 		LR       <- as.numeric(-2*(logLik(lm(update(formula, eval(paste(". ~ . ", paste("- (", randterms, ")") ))), data=data))-logLik(mod)))
-		print(LR)
 		P.LRT    <- ifelse(LR<=0, 1, pchisq(LR,1,lower.tail=FALSE)/2)
 	}
 	if(length(randterms)>1) {
