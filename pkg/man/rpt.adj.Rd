@@ -25,7 +25,7 @@ rpt.adj (formula, grname, data,
 	\item{npermut}{Number of permutations used when calculating asymtotic \emph{P} values (defaults to 1000). Ignored for the "GLMM.add" method.}
 }
 \details{
-	For \code{datatype="Gaussian"} calls function \link{rpt.remlLMM.adj} or \link{rpt.mcmcLMM.adj} (methods "REML" and "MCMC", respecitvely).
+	For \code{datatype="Gaussian"} calls function \link{rpt.remlLMM.adj} or rpt.mcmcLMM.adj (methods "REML" and "MCMC", respecitvely) (Note that rpt.mcmcLMM.adj is not yet implemented).
 	
 	For \code{datatype="binomial"} or \code{datatype="proportion"} calls function \link{rpt.binomGLMM.multi} or \link{rpt.binomGLMM.add} (methods "GLMM.multi" and "GLMM.add", respectively).
 	
@@ -68,7 +68,7 @@ rpt.adj (formula, grname, data,
 data(Fledglings)
 Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
 (rpt.Fledge <- rpt.adj(sqrtFledge ~ Age + (1|MaleID), "MaleID", data=Fledglings, datatype="Gaussian", method="REML", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
-data(BodySize)
-(rpt.Weight <- rpt.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, datatype="Gaussian", method="MCMC"))
+# data(BodySize)
+# (rpt.Weight <- rpt.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, datatype="Gaussian", method="MCMC"))
 }
 \keyword{models}
