@@ -9,7 +9,7 @@ rpt.adj <- function(formula, grname, data,
 			method<-"REML" 
 		}
 		if (method=="REML")  return(rpt.remlLMM.adj(formula, grname, data, CI=CI, nboot=nboot, npermut=npermut))
-		if (method=="MCMC")  return(rpt.mcmcLMM.adj(formula, grname, data, CI=CI)) # return(rpt.mcmcLMM(y, groups, CI=CI))
+		if (method=="MCMC")  warning("Not jet implemented") # return(rpt.mcmcLMM.adj(formula, grname, data, CI=CI))
 		if (method=="ANOVA") warning("Not jet implemented") # return(rpt.aov(y, groups, CI=CI, npermut=npermut))	
 		if (method=="corr")  warning("Not jet implemented") # return(rpt.corr(y, groups, CI=CI, nboot=nboot, npermut=npermut)) 
 	}
