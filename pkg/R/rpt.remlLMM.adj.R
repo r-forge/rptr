@@ -7,12 +7,13 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 	R.pe <- function(formula, data, grname) {
 		mod.fnc = lmer(formula, data)
 		varComps <- lme4::VarCorr(mod.fnc)
-		if(any(as.numeric(summary(mod.fnc)@REmat[,"Variance"])==0) & nboot > 0) {
+		mod.fnc.summary = summary(mod.fnc)
+		if(any(as.numeric(mod.fnc.summary@REmat[,"Variance"])==0) & nboot > 0) {
 			assign("nboot", 0, envir=e1)
 			warning("(One of) the point(s) estimate for the repeatability was exactly zero; parametric bootstrapping has been skipped.")
 		}
 		var.a    <- as.numeric(varComps[grname])
-		var.p    <- sum(as.numeric(summary(mod.fnc)@REmat[,"Variance"]))
+		var.p    <- sum(as.numeric(mod.fnc.summary@REmat[,"Variance"]))
 		#var.e    <- as.numeric(attr(varComps, "sc")^2)
 		R        <- var.a / var.p
 		return(R) 

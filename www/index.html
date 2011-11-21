@@ -79,10 +79,24 @@
 				at least for data exploration. nboot = 0 and npermut = 0 suppress bootstrapping and randomization, respectively (though the 
 				point estimate will be returned as the single permutation). </li>
 			</ul>
+		<h2> NEWS</h2>
+			<ul class="none">
+				<li> We have recently included a new function <code>rpt.remlLMM.adj</code> that allows the estimation of adjusted repeatabilites. The function requires 
+				a <code>formula</code> argument, a <code>grname</code> argument and a <code>data</code> argument. This allows much greater flexibility for estimating adjusted 
+				repeatabilites. The <code>formula</code> argument uses the same syntax as <code>lmer</code> and allows the specification of fixed and random effects. With only 
+				one random effect, the function will return the same repeatability as the function <code>rpt.remlLMM</code>.  The argument <code>grname</code> requires 
+				a character string or a vector of character strings that match one or more of the random effects specified in the formula. The option to specify more than one
+				random effect allows estimating multiple variance components and their standard errors simultaneously. The <code>data</code> argument requires a 
+				dataframe that contains the columns spefied in the fomula. The function <code>rpt.remlLMM.adj</code> can also be accessed via the wrapper function <code>rpt.adj</code> 
+				(again using the <code>formula</code>, <code>grname</code>, <code>data</code> specification).</li> 
+			</ul>
 		<h2> Plans for the future </h2>
 			<ul class="none">
-				<li> We are planning to implement the estimation of adjusted repeatabilities (i.e. repeatabilities after accounting for one or more fixed
-				factors/covariates). This might involve a change of the input arguments (from two separate arguments, y and groups, to formula input).</li> 
+				<li> We are planning to implement the estimation of adjusted repeatabilities also for non-Gaussian models and for Gaussian models using MCMC sampling. 
+				The repeatabilities for non-Gaussian models will depend on the intercept and hence on the values of the covariate. Covariates should therefore best be centered 
+				on a mean of zero. Perspectively, we are planning to integrate the <code>rpt.adj</code> family of functions into <code>rpt</code>, since this allows greater flexibility for 
+				estiamting standard and adjusted repeatabilites.
+				</li> 
 			</ul>
 		<h2> Project links </h2>
 			<ul>
