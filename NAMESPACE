@@ -1,1 +1,1 @@
-importFrom("lme4", mer)
+importClassesFrom("lme4", mer)
