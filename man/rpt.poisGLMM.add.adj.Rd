@@ -52,11 +52,11 @@
 }	
 \examples{
 # repeatability for female clutch size over two years.
-data(BroodParasitism)
-(rpt.Host <- rpt.poisGLMM.add.adj(OwnClutches ~ (1|FemaleID), "FemaleID", data=BroodParasitism))
+#data(BroodParasitism)
+#(rpt.Host <- rpt.poisGLMM.add.adj(OwnClutches ~ (1|FemaleID), "FemaleID", data=BroodParasitism))
 
 # repeatability for male fledgling success
-data(Fledglings)
-(rpt.Fledge <- rpt.poisGLMM.add.adj(Fledge ~ (1|MaleID), "MaleID", data=Fledglings))
+#data(Fledglings)
+#(rpt.Fledge <- rpt.poisGLMM.add.adj(Fledge ~ (1|MaleID), "MaleID", data=Fledglings))
 }
 \keyword{models}

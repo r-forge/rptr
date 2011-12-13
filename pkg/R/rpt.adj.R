@@ -28,6 +28,6 @@ rpt.adj <- function(formula, grname, data,
 		}
 		if(length(link)>1) link="log"
 		if (method=="GLMM.multi") warning("Not jet implemented") # return(rpt.poisGLMM.multi(y, groups, link, CI=CI, nboot=nboot, npermut=npermut)) 
-		if (method=="GLMM.add")   return(rpt.mcmcLMM.adj(formula, grname, data, CI=CI, link=link)) # return(rpt.poisGLMM.add.adj(formula, grname, data, CI=CI)) 
+		if (method=="GLMM.add")   warning("Not jet implemented") # return(rpt.poisGLMM.add.adj(formula, grname, data, CI=CI)) 
 	} 
 }

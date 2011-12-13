@@ -4,10 +4,10 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 	if(npermut < 1) npermut <- 1
 	e1 = environment()
 	# point estimates of R
-	R.pe <- function(formula, data, grname) {
+	R.pe <- function(formula, data, grname, peYN=FALSE) {
 		mod.fnc = lmer(formula, data)
 		varComps <- lme4::VarCorr(mod.fnc)
-		if(any(varComps==0) & nboot > 0) {
+		if(peYN & any(varComps==0) & nboot > 0) {
 			assign("nboot", 0, envir=e1)
 			warning("(One of) the point estimate(s) for the repeatability was exactly zero; parametric bootstrapping has been skipped.")
 		}
@@ -17,12 +17,12 @@ rpt.remlLMM.adj = function(formula, grname, data, CI=0.95, nboot=1000, npermut=1
 		R        <- var.a / var.p
 		return(R) 
 	}
-	R <- R.pe(formula, data, grname)
+	R <- R.pe(formula, data, grname, peYN=TRUE)
 	names(R) = grname
 	# confidence interval estimation by parametric bootstrapping
 	bootstr <- function(mod, formula, data, grname) {
 		mod.sim <- arm::sim(mod, n.sim=2)   # for some reason it is not possible to set n.sim=1
-		y <- mod@X %*% matrix(mod.sim@fixef[1,]) + t(mod@Zt) %*% matrix(unlist(mod.sim@ranef)[seq(1, length(unlist(mod.sim@ranef)), by=2)])
+		y <- mod@X %*% matrix(mod.sim@fixef[1,]) + t(as.matrix(mod@Zt)) %*% matrix(unlist(mod.sim@ranef)[seq(1, length(unlist(mod.sim@ranef)), by=2)])
 		y <- y + rnorm(length(y), 0, attr(lme4::VarCorr(mod), "sc"))
 		data[,names(mod@frame)[1]] = as.vector(y)
 		R.pe(formula, data, grname)

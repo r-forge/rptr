@@ -55,10 +55,11 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 			rho <- (omega-1)/(n-1)
 			rho[rho<=0] <-0				# underdispersion is ignored
 			rho[rho>=1] <- 9e-10      # strong overdispersion is forced to have rho ~ 1
-			if(rho==0) m <- rbinom(N,n,p)
-			else {
+#			if(rho==0)
+#				m <- rbinom(N,n,p)
+#			else {
 				m <- rbetabin(N,n,p,rho)    # or p * rho
-			}
+#			}
 		}
 		pqlglmm.binom.model(cbind(m, n-m), groups, n, link) 
 	}

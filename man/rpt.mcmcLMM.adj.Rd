@@ -45,10 +45,10 @@
 }
 \examples{
 # repeatability estimation for weight (body mass) - a lower R than the previous one
-data(BodySize)
-(rpt.Weight <- rpt.mcmcLMM.adj(Weight ~ Tarsus + (1|BirdID), "BirdID", data=BodySize))
+#data(BodySize)
+#(rpt.Weight <- rpt.mcmcLMM.adj(Weight ~ Tarsus + (1|BirdID), "BirdID", data=BodySize))
 # A demonstration that the repeatability can be calculated for multiple levels simultanously. In this case the second component is the residuals variance, i.e. the non-repeatable component
-data(BodySize)
-(rpt.Weight <- rpt.mcmcLMM.adj(Weight ~ Tarsus + (1|BirdID), c("BirdID", "units"), data=BodySize))
+#data(BodySize)
+#(rpt.Weight <- rpt.mcmcLMM.adj(Weight ~ Tarsus + (1|BirdID), c("BirdID", "units"), data=BodySize))
 }
 \keyword{models}
