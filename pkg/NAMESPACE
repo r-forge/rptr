@@ -10,7 +10,3 @@ export(print.rpt,
 		rpt,
 		rpt.remlLMM.adj,
 		rpt.remlLMM)
-
-# importClassesFrom(lme4, "mer", "summary.mer")
-
-# S3method(print, rpt)

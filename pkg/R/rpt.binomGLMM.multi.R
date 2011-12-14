@@ -58,7 +58,7 @@ rpt.binomGLMM.multi <- function(y, groups, link=c("logit", "probit"), CI=0.95, n
 #			if(rho==0)
 #				m <- rbinom(N,n,p)
 #			else {
-				m <- rbetabin(N,n,p,rho)    # or p * rho
+				m <- rbetabinom(N,n,p,rho)    # or p * rho
 #			}
 		}
 		pqlglmm.binom.model(cbind(m, n-m), groups, n, link) 

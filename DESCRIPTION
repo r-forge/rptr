@@ -1,7 +1,7 @@
 Package: rptR
 Title: Repeatability for Gaussian and non-Gaussian data	
 Version: 0.6.404
-Depends: methods, VGAM, MASS, MCMCglmm, coda, nlme, lme4, arm
+Depends: methods, VGAM, MCMCglmm, MASS, nlme, lme4, coda, arm
 Date: 2011-11-24
 Author: Holger Schielzeth <holger.schielzeth@ebc.uu.se> and Shinichi Nakagawa <shinichi.nakagawa@otago.ac.nz>
 Maintainer: Holger Schielzeth <holger.schielzeth@ebc.uu.se>
