@@ -44,11 +44,11 @@
 }
 \examples{
 # repeatability estimation for tarsus length - a very high R
-data(BodySize)
-(rpt.BS <- rpt.remlLMM.adj(Tarsus ~ Sex + (1|BirdID), "BirdID", data=BodySize, nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
+#data(BodySize)
+#(rpt.BS <- rpt.remlLMM.adj(Tarsus ~ Sex + (1|BirdID), "BirdID", data=BodySize, nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
 
 # repeatability estimation for weight (body mass) - a lower R than the previous one
-data(BodySize)
-(rpt.Weight <- rpt.remlLMM.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, nboot=10, npermut=10)) # reduced number of nboot and npermut iterations
+#data(BodySize)
+#(rpt.Weight <- rpt.remlLMM.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, nboot=10, npermut=10)) # reduced number of nboot and npermut iterations
 }
 \keyword{models}
