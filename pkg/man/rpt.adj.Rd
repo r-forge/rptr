@@ -26,10 +26,6 @@ rpt.adj (formula, grname, data,
 }
 \details{
 	For \code{datatype="Gaussian"} calls function \link{rpt.remlLMM.adj} or rpt.mcmcLMM.adj (methods "REML" and "MCMC", respecitvely) (Note that rpt.mcmcLMM.adj is not yet implemented).
-	
-	For \code{datatype="binomial"} or \code{datatype="proportion"} calls function \link{rpt.binomGLMM.multi} or \link{rpt.binomGLMM.add} (methods "GLMM.multi" and "GLMM.add", respectively).
-	
-	For \code{datatype="count"} calls function \link{rpt.poisGLMM.multi} or \link{rpt.poisGLMM.add} (methods "GLMM.multi" and "GLMM.add", respectively). 
 }
 \value{
 	Returns an object of class rpt. See details for specific functions.

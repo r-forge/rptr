@@ -62,6 +62,7 @@ rpt (y, groups,
 	\link{rpt.adj}, \link{rpt.corr}, \link{rpt.aov}, \link{rpt.remlLMM}, \link{rpt.mcmcLMM}, \link{rpt.binomGLMM.add}, \link{rpt.binomGLMM.multi}, \link{rpt.poisGLMM.add}, \link{rpt.poisGLMM.multi} 
 }
 \examples{
+\dontrun{
 # for Gaussian data - correlation-based repeatability
 # repeatability for male breeding success on a transformed scale
 data(Fledglings)
@@ -104,5 +105,6 @@ attach(Fledglings)
 (rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.multi", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
 (rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.add"))
 detach(Fledglings)
+}
 }
 \keyword{models}

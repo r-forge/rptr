@@ -10,3 +10,5 @@ export(print.rpt,
 		rpt,
 		rpt.remlLMM.adj,
 		rpt.remlLMM)
+
+import(methods, VGAM, MCMCglmm, MASS, nlme, lme4, coda, arm)
