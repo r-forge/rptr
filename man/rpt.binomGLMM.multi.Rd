@@ -56,8 +56,10 @@
 # repeatability estimations for egg dumping (binary data)
 data(BroodParasitism)
 attach(BroodParasitism)
-(rpt.Host <- rpt.binomGLMM.multi(HostYN[OwnClutchesBothSeasons==1], FemaleID[OwnClutchesBothSeasons==1], nboot=10, npermut=10)) # low number of nboot and npermut to speed up error checking
-(rpt.BroodPar <- rpt.binomGLMM.multi(cbpYN, FemaleID, nboot=10, npermut=10))  # low number of nboot and npermut to speed up error checking
+(rpt.Host <- rpt.binomGLMM.multi(HostYN[OwnClutchesBothSeasons==1], FemaleID[OwnClutchesBothSeasons==1],
+	nboot=10, npermut=10)) # low number of nboot and npermut to speed up error checking
+(rpt.BroodPar <- rpt.binomGLMM.multi(cbpYN, FemaleID, nboot=10, npermut=10))  
+	# low number of nboot and npermut to speed up error checking
 detach(BroodParasitism)
 
 # repeatability estimations for egg dumping (proportion data)

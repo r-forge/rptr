@@ -67,6 +67,6 @@ Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
 	method="REML", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
 # data(BodySize)
 # (rpt.Weight <- rpt.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, datatype="Gaussian", 
-	method="MCMC"))
+#	method="MCMC"))
 }
 \keyword{models}
