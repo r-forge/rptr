@@ -59,13 +59,15 @@
 # repeatability for female clutch size over two years.
 data(BroodParasitism)
 attach(BroodParasitism)
-(rpt.Host <- rpt.poisGLMM.multi(OwnClutches, FemaleID, nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
+(rpt.Host <- rpt.poisGLMM.multi(OwnClutches, FemaleID, nboot=10, npermut=10))  
+	# reduced number of nboot and npermut iterations
 detach(BroodParasitism)
 
 # repeatability for male fledgling success
 data(Fledglings)
 attach(Fledglings)
-(rpt.Fledge <- rpt.poisGLMM.multi(Fledge, MaleID, nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
+(rpt.Fledge <- rpt.poisGLMM.multi(Fledge, MaleID, nboot=10, npermut=10))  
+	# reduced number of nboot and npermut iterations
 detach(Fledglings)
 }
 \keyword{models}

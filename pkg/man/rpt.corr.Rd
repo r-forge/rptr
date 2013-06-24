@@ -42,7 +42,7 @@
 data(Fledglings)
 Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
 attach(Fledglings)
-(rpt.Fledge <- rpt.corr(sqrtFledge, MaleID, nboot=10, npermut=10))  # reduced number of npermut iterations
+(rpt.Fledge <- rpt.corr(sqrtFledge, MaleID, nboot=10, npermut=10))  # reduced number of iterations
 detach(Fledglings)
 }
 \keyword{models}

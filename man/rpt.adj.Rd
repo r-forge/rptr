@@ -63,8 +63,10 @@ rpt.adj (formula, grname, data,
 # repeatability for male breeding success on a transformed scale
 data(Fledglings)
 Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
-(rpt.Fledge <- rpt.adj(sqrtFledge ~ Age + (1|MaleID), "MaleID", data=Fledglings, datatype="Gaussian", method="REML", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
+(rpt.Fledge <- rpt.adj(sqrtFledge ~ Age + (1|MaleID), "MaleID", data=Fledglings, datatype="Gaussian", 
+	method="REML", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
 # data(BodySize)
-# (rpt.Weight <- rpt.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, datatype="Gaussian", method="MCMC"))
+# (rpt.Weight <- rpt.adj(Weight ~ Sex + (1|BirdID), "BirdID", data=BodySize, datatype="Gaussian", 
+	method="MCMC"))
 }
 \keyword{models}

@@ -64,9 +64,11 @@ detach(BroodParasitism)
 data(BroodParasitism)
 attach(BroodParasitism)
 ParasitisedOR <- cbind(HostClutches, OwnClutches-HostClutches)   
-(rpt.Host <- rpt.binomGLMM.multi(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], nboot=10, npermut=10))  # reduced number of npermut iterations
+(rpt.Host <- rpt.binomGLMM.multi(ParasitisedOR[OwnClutchesBothSeasons==1,], 
+	FemaleID[OwnClutchesBothSeasons==1], nboot=10, npermut=10))  # reduced number of npermut iterations
 ParasitismOR <- cbind(cbpEggs, nEggs-cbpEggs)   
-#(rpt.BroodPar <- rpt.binomGLMM.multi(ParasitismOR, FemaleID, nboot=10, npermut=10))  # reduced number of npermut iterations
+#(rpt.BroodPar <- rpt.binomGLMM.multi(ParasitismOR, FemaleID, nboot=10, npermut=10))  
+	# reduced number of npermut iterations
 detach(BroodParasitism)
 }
 \keyword{models}

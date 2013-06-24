@@ -62,20 +62,24 @@ rpt (y, groups,
 	\link{rpt.adj}, \link{rpt.corr}, \link{rpt.aov}, \link{rpt.remlLMM}, \link{rpt.mcmcLMM}, \link{rpt.binomGLMM.add}, \link{rpt.binomGLMM.multi}, \link{rpt.poisGLMM.add}, \link{rpt.poisGLMM.multi} 
 }
 \examples{
+\dontrun{
+# all examples use a reduced number of npermut and nboot iterations!
+
 # for Gaussian data - correlation-based repeatability
 # repeatability for male breeding success on a transformed scale
 data(Fledglings)
 Fledglings$sqrtFledge <- sqrt(Fledglings$Fledge)
 attach(Fledglings)
-(rpt.Fledge <- rpt(sqrtFledge, MaleID, datatype="Gaussian", method="corr", nboot=10, npermut=10))   # reduced number of nboot and npermut iterations
+(rpt.Fledge <- rpt(sqrtFledge, MaleID, datatype="Gaussian", method="corr", nboot=10, npermut=10))
 detach(Fledglings)
 
 # for Gaussian data - ANOVA-based and two LMM-based repeatabilities
 # repeatability estimation for weight (body mass)
 data(BodySize)
 attach(BodySize)
-(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="ANOVA", npermut=10))              # reduced number of npermut iterations
-(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="REML", nboot=10, npermut=10))     # reduced number of nboot and npermut iterations
+(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="ANOVA", npermut=10))
+(rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="REML", nboot=10, npermut=10)) 
+	# reduced number of nboot and npermut iterations
 (rpt.Weight <- rpt(Weight, BirdID, datatype="Gaussian", method="MCMC"))
 detach(BodySize)
 
@@ -83,8 +87,10 @@ detach(BodySize)
 # repeatability estimations for egg dumping (binary data)
 data(BroodParasitism)
 attach(BroodParasitism)
-(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.multi", link="logit", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
-(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.multi", link="probit", nboot=10, npermut=10)) # reduced number of nboot and npermut iterations
+(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.multi", link="logit", 
+	nboot=10, npermut=10))
+(rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.multi", link="probit", 
+	nboot=10, npermut=10))
 (rpt.BroodPar <- rpt(cbpYN, FemaleID, datatype="binomial", method="GLMM.add"))
 detach(BroodParasitism)
 
@@ -93,16 +99,19 @@ detach(BroodParasitism)
 data(BroodParasitism)
 attach(BroodParasitism)
 ParasitisedOR <- cbind(HostClutches, OwnClutches-HostClutches)   
-(rpt.Host <- rpt(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], datatype="proportion", method="GLMM.multi", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
-(rpt.Host <- rpt(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], datatype="proportion", method="GLMM.add"))
+(rpt.Host <- rpt(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], 
+	datatype="proportion", method="GLMM.multi", nboot=10, npermut=10))
+(rpt.Host <- rpt(ParasitisedOR[OwnClutchesBothSeasons==1,], FemaleID[OwnClutchesBothSeasons==1], 
+	datatype="proportion", method="GLMM.add"))
 detach(BroodParasitism)
 
 # for count data - additive and multiplicative overdispersion models
 # repeatability for male fledgling success
 data(Fledglings)
 attach(Fledglings)
-(rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.multi", nboot=10, npermut=10))  # reduced number of nboot and npermut iterations
+(rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.multi", nboot=10, npermut=10))
 (rpt.Fledge <- rpt(Fledge, MaleID, datatype="count", method="GLMM.add"))
 detach(Fledglings)
+}
 }
 \keyword{models}
