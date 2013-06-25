@@ -53,6 +53,7 @@
 }
 \seealso{\link{rpt.binomGLMM.add}, \link{rpt}, \link{print.rpt}}
 \examples{
+\dontrun{
 # repeatability estimations for egg dumping (binary data)
 data(BroodParasitism)
 attach(BroodParasitism)
@@ -72,5 +73,6 @@ ParasitismOR <- cbind(cbpEggs, nEggs-cbpEggs)
 #(rpt.BroodPar <- rpt.binomGLMM.multi(ParasitismOR, FemaleID, nboot=10, npermut=10))  
 	# reduced number of npermut iterations
 detach(BroodParasitism)
+}
 }
 \keyword{models}
